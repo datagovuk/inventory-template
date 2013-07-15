@@ -111,7 +111,7 @@ $excel->getActiveSheet()->setTitle('Inventory')
                         ->SetCellValue('A1', 'Title')
                         ->SetCellValue('B1', 'Description')
                         ->SetCellValue('C1', 'Owner')
-                        ->SetCellValue('D1', 'Date to be published');
+                        ->SetCellValue('D1', 'Date to be published dd/mm/yyyy');
 
 
 /*
@@ -152,9 +152,6 @@ for ($i = 1; $i <=1000; $i++) {
                ->setPrompt('Please pick a value from the drop-down list.')
                ->setFormula1($formula);
 
-    $excel->getActiveSheet()->getStyle("D{$i}")
-          ->getNumberFormat()
-          ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
 
     $validation = $excel->getActiveSheet()->getCell("D{$i}")->getDataValidation();
     $validation->setType( PHPExcel_Cell_DataValidation::TYPE_DATE  )
