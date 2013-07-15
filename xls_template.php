@@ -133,7 +133,7 @@ for ($i = 0; $i <= count($subpublishers) - 1; $i++) {
   Build the formula that was be used by validation to point to the
   items we just added to the Publishers sheet
 */
-$formula = 'Publishers!$A$1:$A$'.strval(count($subpublishers) - 1);
+$formula = 'Publishers!$A$1:$A$'.strval(count($subpublishers));
 
 /* We can't set a drop down on a column, only each cell within the column, so we've
    picked 1000 as a reasonably large number. */
