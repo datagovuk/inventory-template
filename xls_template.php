@@ -66,7 +66,7 @@ function get_subpublishers_for($name) {
 
         SELECT G.title FROM subtree AS ST
         INNER JOIN public.group G ON G.id = ST.table_id
-        WHERE group_id = (select id from public.group where title='$name') AND G.type = 'publisher' and table_name='group' and G.state='active'
+        WHERE group_id = (select id from public.group where title=$1) AND G.type = 'publisher' and table_name='group' and G.state='active'
         ORDER BY G.name
 EOT;
 
@@ -75,7 +75,8 @@ EOT;
     $dbconn = pg_connect(get_db_connection_string())
            or die('Could not connect: ' . pg_last_error());
 
-    $result = pg_query($CTE_QUERY) or die('Query failed: ' . pg_last_error());
+    $result = pg_prepare($dbconn, "cte", $CTE_QUERY);
+    $result = pg_execute($dbconn, "cte", array($name));
 
     while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
         foreach ($line as $col_value) {
