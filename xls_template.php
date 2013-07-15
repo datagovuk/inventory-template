@@ -17,16 +17,17 @@ date_default_timezone_set('Europe/London');
 
 /**
 * If the required query parameter is not supplied we should just raise a 404.
+* Unfortunately this means we have to render the page ourselves, and we don't
+* want to do that (we want the CKAN 404) so we redirect to a known bad page.
 **/
 if (!isset($_GET["publisher"])) {
-    header('HTTP/1.0 404 Not Found');
-    echo "<h1>404 Not Found</h1>";
-    echo "The page that you have requested could not be found.";
+    // No point setting a 404 as the following line forces the response to a
+    // 302, so we will rely on the target page generating the correct code.
+    header('Location: /data/inventory-error');
     exit();
 }
 
-$publisher =  $_GET["publisher"] or die();
-
+$publisher =  $_GET["publisher"];
 
 /**
 * Builds a DB connection string from the settings in the CKAN config. The location
@@ -59,14 +60,21 @@ function get_subpublishers_for($name) {
     $CTE_QUERY = <<<EOT
         WITH RECURSIVE subtree(id) AS (
             SELECT M.* FROM public.member AS M
-            WHERE M.table_name = 'group' AND M.state = 'active'
-            UNION
+            WHERE M.table_name = 'group'
+              AND M.state = 'active'
+          UNION
             SELECT M.* FROM public.member M, subtree SG
-            WHERE M.table_id = SG.group_id AND M.table_name = 'group' AND M.state = 'active')
+            WHERE M.table_id = SG.group_id
+              AND M.table_name = 'group'
+              AND M.state = 'active'
+        )
 
         SELECT G.title FROM subtree AS ST
         INNER JOIN public.group G ON G.id = ST.table_id
-        WHERE group_id = (select id from public.group where title=$1) AND G.type = 'publisher' and table_name='group' and G.state='active'
+        WHERE group_id = (select id from public.group where title=$1)
+          AND G.type = 'publisher'
+          AND table_name='group'
+          AND G.state='active'
         ORDER BY G.name
 EOT;
 
@@ -83,6 +91,7 @@ EOT;
             array_push($publishers, $col_value);
         }
     }
+
     pg_free_result($result);
     pg_close($dbconn);
     return $publishers;
@@ -91,7 +100,6 @@ EOT;
 // PHPExcel is from http://phpexcel.codeplex.com/releases/view/107442
 include 'Classes/PHPExcel.php';
 include 'Classes/PHPExcel/Writer/Excel2007.php';
-
 
 /*
   Create a new spreadsheet and set appropriate meta-data for the spreadsheet
