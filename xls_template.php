@@ -38,14 +38,15 @@ function get_db_connection_string() {
 
     // Read the config file and find the postgresql connection string, parsing it
     // for the relevant information.
-    $regex = "/sqlalchemy.url = postgresql:\/\/(.*)\:(.*)\@(.*)\/(.*)/";
+    $regex = "/sqlalchemy.url = postgresql:\/\/(.*)\:(.*)\@(.*):(.*)\/(.*)/";
     $match = preg_match_all ($regex, file_get_contents($config_file), $config);
     $uname    = $config[1][0];
     $password = $config[2][0];
     $host     = $config[3][0];
-    $db       = $config[4][0];
+    $port     = $config[4][0];
+    $db       = $config[5][0];
 
-    return "host={$host} dbname={$db} user=${uname} password=${password}";
+    return "host={$host} dbname={$db} user=${uname} password=${password} port=${port}";
 }
 
 
