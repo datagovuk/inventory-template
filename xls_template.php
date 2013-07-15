@@ -34,7 +34,7 @@ $publisher =  $_GET["publisher"] or die();
 * apache.
 **/
 function get_db_connection_string() {
-    $config_file = getenv('CKAN_CONFIG_FILE') or die('CKAN_CONFIG_FILE not set')
+    $config_file = getenv('CKAN_CONFIG_FILE') or die('CKAN_CONFIG_FILE not set');
 
     // Read the config file and find the postgresql connection string, parsing it
     // for the relevant information.
@@ -135,9 +135,9 @@ for ($i = 0; $i <= count($subpublishers) - 1; $i++) {
 $formula = 'Publishers!$A$1:$A$'.strval(count($subpublishers) - 1);
 
 /* We can't set a drop down on a column, only each cell within the column, so we've
-   picked 500 as a reasonably large number. */
+   picked 1000 as a reasonably large number. */
 $excel->setActiveSheetIndex(0);
-for ($i = 1; $i <= 500; $i++) {
+for ($i = 1; $i <=1000; $i++) {
     $validation = $excel->getActiveSheet()->getCell("C{$i}")->getDataValidation();
     $validation->setType( PHPExcel_Cell_DataValidation::TYPE_LIST )
                ->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION )
