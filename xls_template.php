@@ -179,7 +179,7 @@ header('Content-Type: application/vnd.ms-excel');
 header("Content-Disposition: attachment;filename='inventory_template.xls'");
 
 // Save as an Excel 5 file directly to the response stream
-$writer = new PHPExcel_Writer_Excel5($excel);
+$writer = new PHPExcel_Writer_Excel2007($excel);
 $writer->save("php://output");
 
 ?>
