@@ -162,7 +162,7 @@ for ($i = 1; $i <=1000; $i++) {
     $validation->setType( PHPExcel_Cell_DataValidation::TYPE_LIST )
                ->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION )
                ->setAllowBlank(true)
-               ->setShowInputMessage(false)
+               ->setShowInputMessage(true)
                ->setShowErrorMessage(false)
                ->setShowDropDown(true)
                ->setError('Value is not in list.')
