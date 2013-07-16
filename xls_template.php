@@ -83,6 +83,16 @@ EOT;
     $dbconn = pg_connect(get_db_connection_string())
            or die('Could not connect: ' . pg_last_error());
 
+    $result = pg_prepare($dbconn, 'check', 'SELECT Id FROM public.group WHERE title=$1');
+    $result = pg_execute($dbconn, 'check', array($name));
+    $row_count = pg_num_rows($result);
+    if ( $row_count == 0 ) {
+      pg_free_result($result);
+      pg_close($dbconn);
+      header('Location: /data/inventory-error');
+      exit();
+    }
+
     $result = pg_prepare($dbconn, "cte", $CTE_QUERY);
     $result = pg_execute($dbconn, "cte", array($name));
 
@@ -175,8 +185,8 @@ for ($i = 1; $i <=1000; $i++) {
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
-header('Content-Type: application/vnd.ms-excel');
-header("Content-Disposition: attachment;filename='inventory_template.xls'");
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header("Content-Disposition: attachment;filename='inventory_template.xlsx'");
 
 // Save as an Excel 5 file directly to the response stream
 $writer = new PHPExcel_Writer_Excel2007($excel);
