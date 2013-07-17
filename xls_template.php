@@ -161,7 +161,7 @@ for ($i = 1; $i <=1000; $i++) {
     $validation->setType( PHPExcel_Cell_DataValidation::TYPE_LIST )
                ->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION )
                ->setAllowBlank(true)
-               ->setShowInputMessage(true)
+               ->setShowInputMessage(false) # Fixed
                ->setShowErrorMessage(false)
                ->setShowDropDown(true)
                ->setError('Value is not in list.')
@@ -169,7 +169,7 @@ for ($i = 1; $i <=1000; $i++) {
                ->setPrompt('Please pick a value from the drop-down list.')
                ->setFormula1($formula);
 
-
+    /*
     $validation = $excel->getActiveSheet()->getCell("D{$i}")->getDataValidation();
     $validation->setType( PHPExcel_Cell_DataValidation::TYPE_DATE  )
                ->setErrorStyle( PHPExcel_Cell_DataValidation::STYLE_INFORMATION )
@@ -178,6 +178,7 @@ for ($i = 1; $i <=1000; $i++) {
                ->setShowErrorMessage(false)
                ->setError('Value must be a date dd/mm/yyyy')
                ->setPrompt('Please enter a date as dd/mm/yyyy.');
+    */
 }
 
 // Header setup for response
