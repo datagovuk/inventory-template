@@ -109,7 +109,6 @@ EOT;
 
 // PHPExcel is from http://phpexcel.codeplex.com/releases/view/107442
 include 'Classes/PHPExcel.php';
-include 'Classes/PHPExcel/Writer/Excel2007.php';
 
 /*
   Create a new spreadsheet and set appropriate meta-data for the spreadsheet
@@ -185,11 +184,11 @@ for ($i = 1; $i <=1000; $i++) {
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header("Content-Disposition: attachment;filename='inventory_template.xlsx'");
+header('Content-Type: application/vnd.ms-excel');
+header("Content-Disposition: attachment;filename='inventory_template.xls'");
 
 // Save as an Excel 5 file directly to the response stream
-$writer = new PHPExcel_Writer_Excel2007($excel);
+$writer = new PHPExcel_Writer_Excel5($excel);
 $writer->save("php://output");
 
 ?>
