@@ -129,6 +129,7 @@ $excel->getActiveSheet()->setTitle('Inventory')
                         ->SetCellValue('B1', 'Description')
                         ->SetCellValue('C1', 'Owner')
                         ->SetCellValue('D1', 'Date to be published dd/mm/yyyy');
+                        ->SetCellValue('E1', 'Release notes');
 
 
 /*
