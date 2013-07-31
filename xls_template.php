@@ -176,7 +176,7 @@ header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 header('Content-Type: application/vnd.ms-excel');
-header("Content-Disposition: attachment;filename='inventory_template.xls'");
+header('Content-Disposition: attachment;filename="inventory_template.xls"');
 
 // Save as an Excel 5 file directly to the response stream
 $writer = new PHPExcel_Writer_Excel5($excel);
