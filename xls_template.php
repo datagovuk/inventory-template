@@ -57,25 +57,22 @@ function get_db_connection_string() {
 **/
 function get_subpublishers_for($name) {
 
-    $CTE_QUERY = <<<EOT
-        WITH RECURSIVE subtree(id) AS (
-            SELECT M.* FROM public.member AS M
-            WHERE M.table_name = 'group'
-              AND M.state = 'active'
-          UNION
-            SELECT M.* FROM public.member M, subtree SG
-            WHERE M.table_id = SG.group_id
-              AND M.table_name = 'group'
-              AND M.state = 'active'
-        )
-
-        SELECT G.title FROM subtree AS ST
-        INNER JOIN public.group G ON G.id = ST.table_id
-        WHERE group_id = (select id from public.group where title=$1)
-          AND G.type = 'publisher'
-          AND table_name='group'
-          AND G.state='active'
-        ORDER BY G.name
+$CTE_QUERY = <<<EOT
+    WITH RECURSIVE child(depth) AS
+    (
+        -- non-recursive term
+        SELECT 0, * FROM member
+        WHERE table_id = (SELECT id FROM public.group WHERE title=$1) AND table_name = 'group' AND state = 'active'
+        UNION ALL
+        -- recursive term
+        SELECT c.depth + 1, m.* FROM member AS m, child AS c
+        WHERE m.table_id = c.group_id AND m.table_name = 'group'
+              AND m.state = 'active'
+    )
+    SELECT G.title FROM child
+        INNER JOIN public.group G ON G.id = child.group_id
+        WHERE G.type = 'organization' AND G.state='active'
+        ORDER BY child.depth ASC;
 EOT;
 
     // Start with the current title
